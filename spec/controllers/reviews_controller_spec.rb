@@ -3,12 +3,10 @@ require 'spec_helper'
 describe ReviewsController do
   describe "POST create" do
     context "authenticated users" do
-      let(:current_user) { Fabricate(:user) }
+      let(:alice) { Fabricate(:user) }
       let(:video) { Fabricate(:video) }
 
-      before do
-        session[:user_id] = current_user.id
-      end
+      before { set_current_user(alice) }
 
       context "valid reviews" do
         it "redirects to the video page" do
@@ -23,7 +21,7 @@ describe ReviewsController do
 
         it "creates the review for the current sign user" do
           post :create, review: Fabricate.attributes_for(:review), video_id: video
-          expect(video.reviews.first.user).to eq(current_user)
+          expect(video.reviews.first.user).to eq(alice)
         end
       end
 
@@ -53,10 +51,8 @@ describe ReviewsController do
     end
 
     context "unauthenticated users" do
-      it "redirects to the sign in path" do
-        video = Fabricate(:video)
-        post :create, review: {rating: 3}, video_id: video
-        expect(response).to redirect_to sign_in_path
+      it_behaves_like "requires sign in" do
+        let(:action) { post :create, review: {rating: 3}, video_id: 1 }
       end
 
       it "should not create the review" do
