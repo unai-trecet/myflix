@@ -6,11 +6,6 @@ describe UsersController do
       get :new
       expect(assigns(:user)).to be_instance_of(User)
     end
-
-    it "renders the :new template" do
-      get :new
-      expect(response).to render_template(:new)
-    end
   end
 
   describe "POST create" do
