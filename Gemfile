@@ -9,6 +9,8 @@ gem 'fabrication'
 gem 'faker'
 gem 'carrierwave'
 gem 'mini_magick'
+gem 'stripe'
+gem 'figaro'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
