@@ -37,4 +37,30 @@ describe Video do
       expect(Video.search_by_title("")).to eq([])
     end
   end
+
+  describe "#rating" do
+    let(:video) { Fabricate(:video) }
+
+    it "gives rating nil without reviews" do
+      video.rating.should be_nil
+    end
+
+    it "gives average rating of one review" do
+      video.reviews.create(rating: 4, content: "asd")
+      video.rating.should == 4
+    end
+
+    it "gives average rating of reviews" do
+      video.reviews.create(rating: 4, content: "asd")
+      video.reviews.create(rating: 1, content: "asd")
+      video.rating.should == 2.5
+    end
+
+    it "gives average rating of reviews considering decimals" do
+      video.reviews.create(rating: 4, content: "asd")
+      video.reviews.create(rating: 1, content: "asd")
+      video.reviews.create(rating: 5, content: "asd")
+      video.rating.should == 3.3
+    end
+  end
 end
