@@ -4,7 +4,7 @@ class AdminsController < ApplicationController
   private
 
   def require_admin
-    if !current_user.admin?
+    if current_user && !current_user.admin?
       flash[:error] = "You are not authorized to do that."
       redirect_to home_path
     end
