@@ -9,14 +9,12 @@ class UserSignup
   def sign_up stripe_token, invitation_token
     if @user.valid?
 
-      charge = StripeWrapper::Charge.create(
-        :amount      => 999,
-        :currency    => "usd",
-        :card        => stripe_token,
-        :description => "Sign up charge for #{ @user.email }"
+      costumer = StripeWrapper::Customer.create(
+        :email      => @user.email,
+        :card        => stripe_token
       )
 
-      if charge.successful?
+      if costumer.successful?
         @user.save
         create_invitation_relationships @user, invitation_token
         AppMailer.send_welcome_email(@user).deliver
@@ -24,13 +22,13 @@ class UserSignup
         self
       else
         @status = :failed
-        @error_message = charge.error_message
+        @error_message = costumer.error_message
         self
       end
 
     else
       @status = :failed
-      @error_message = "User couldn't be created. . Please check the following errors. #{@user.errors.full_messages.first}"
+      @error_message = "User couldn't be created. Please check the following errors. #{@user.errors.full_messages.first}"
       self
     end
   end

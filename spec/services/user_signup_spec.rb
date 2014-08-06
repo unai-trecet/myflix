@@ -4,8 +4,8 @@ describe UserSignup do
   describe "#sign_up" do
     context "valid personal ifno and valid card" do
 
-      let(:charge) { double(:charge, successful?: true) }
-      before { StripeWrapper::Charge.should_receive(:create).and_return(charge) }
+      let(:costumer) { double(:costumer, successful?: true) }
+      before { StripeWrapper::Customer.should_receive(:create).and_return(costumer) }
       after { ActionMailer::Base.deliveries.clear }
 
       it "creates the user" do
@@ -53,8 +53,8 @@ describe UserSignup do
     end
 
     context "valid personal info and declined card" do
-      let(:charge) { double(:charge, successful?: false, error_message: "Your card was declined") }
-      before { StripeWrapper::Charge.should_receive(:create).and_return(charge) }
+      let(:costumer) { double(:costumer, successful?: false, error_message: "Your card was declined") }
+      before { StripeWrapper::Customer.should_receive(:create).and_return(costumer) }
 
       it "does not create a new user record" do
         UserSignup.new(Fabricate.build :user, email: "paq@paq.com", full_name: "paquito_spec", password: "password", password_confirmation: "password").sign_up "stripe_token", nil  
@@ -75,7 +75,7 @@ describe UserSignup do
       end
 
       it "does not charge the credit card" do
-        StripeWrapper::Charge.should_not_receive(:create)
+        StripeWrapper::Customer.should_not_receive(:create)
       end
     end     
   end

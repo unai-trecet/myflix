@@ -30,7 +30,7 @@ feature 'User registers', { js: true, vcr: true } do
     fill_in_invalid_user_info
     fill_in_card "4242424242424242"
     click_button "Sign Up"
-    expect(page).to have_content("User couldn't be created. Please check the errors bellow.")
+    expect(page).to have_content("User couldn't be created. Please check the following errors.")
   end
 
   scenario "with invalid user info and invalid card" do
