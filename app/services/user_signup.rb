@@ -15,6 +15,7 @@ class UserSignup
       )
 
       if costumer.successful?
+        @user.costumer_token = costumer.costumer_token
         @user.save
         create_invitation_relationships @user, invitation_token
         AppMailer.send_welcome_email(@user).deliver

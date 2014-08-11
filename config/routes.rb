@@ -41,4 +41,6 @@ Myflix::Application.routes.draw do
   end
 
   resources :charges, only: [:new, :create]
+
+  mount StripeEvent::Engine => '/stripe_events'
 end

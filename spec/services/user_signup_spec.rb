@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe UserSignup do
   describe "#sign_up" do
-    context "valid personal ifno and valid card" do
+    context "valid personal info and valid card" do
 
-      let(:costumer) { double(:costumer, successful?: true) }
+      let(:costumer) { double(:costumer, successful?: true, costumer_token: "costumer_token") }
       before { StripeWrapper::Customer.should_receive(:create).and_return(costumer) }
       after { ActionMailer::Base.deliveries.clear }
 
@@ -50,6 +50,12 @@ describe UserSignup do
         message = ActionMailer::Base.deliveries.last
         expect(message.body).to include("Welcome to Myflix paquito_spec!")
       end          
+
+      it "stores the costumer token from stripe" do
+        UserSignup.new(Fabricate.build :user, email: "paq@paq.com", full_name: "paquito_spec").sign_up "stripe_token", nil
+      
+        expect(User.last.costumer_token).to eq("costumer_token")
+      end
     end
 
     context "valid personal info and declined card" do
