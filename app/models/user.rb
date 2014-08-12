@@ -52,4 +52,8 @@ class User < ActiveRecord::Base
     self.generate_token
     self.save
   end
+
+  def deactivate!
+    update_column(:active, false)
+  end
 end

@@ -116,4 +116,12 @@ describe User do
       expect(ana.admin?).to be_false
     end
   end
+
+  describe "deactivate" do
+    it "sets activate to false" do
+      ana = Fabricate :user
+      ana.deactivate!
+      expect(ana).not_to be_active
+    end
+  end
 end

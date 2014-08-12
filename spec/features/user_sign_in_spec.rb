@@ -16,4 +16,12 @@ feature "User sign in" do
 
     page.should have_content "email and/or password are not correct."
   end
+
+  scenario "with deactivated user" do
+    paco = Fabricate :user, email: "paq2@paq.com", password: "12345678", password_confirmation: "12345678", full_name: "Mario", active: false
+    sign_in paco 
+
+    expect(page).not_to have_content paco.full_name
+    expect(page).to have_content "Your account has been suspended, please contact costumer service."
+  end
 end
