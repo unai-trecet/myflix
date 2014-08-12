@@ -1,6 +1,4 @@
-class Admin::VideosController < ApplicationController
-  before_filter :require_user 
-  before_filter :ensure_admin
+class Admin::VideosController < AdminsController
 
   def new
     @video = Video.new
@@ -21,12 +19,5 @@ class Admin::VideosController < ApplicationController
 
   def video_params
     params.require(:video).permit(:title, :category_id, :description, :large_cover, :small_cover, :video_url)
-  end
-
-  def ensure_admin
-    if !current_user.admin?
-      flash[:error] = "You are not allowed to visit this area."
-      redirect_to root_path
-    end
   end
 end

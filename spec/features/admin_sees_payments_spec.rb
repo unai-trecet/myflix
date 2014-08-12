@@ -15,5 +15,13 @@ feature 'Admin sees payments' do
     expect(page).to have_content("ana@ana.com")
   end
 
-  scenario "admin cannot see payments"
+  scenario "user cannot see payments" do
+    sign_in Fabricate :user
+    visit admin_payments_path
+
+    expect(page).not_to have_content("$9.99")
+    expect(page).not_to have_content("Ana")
+    expect(page).not_to have_content("ana@ana.com")
+    expect(page).to have_content("You are not allowed to visit this area.")
+  end
 end
